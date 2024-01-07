@@ -8,6 +8,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const simple_auth_connection_1 = require("simple-auth-connection");
+const employeeRouter_1 = require("./routes/employeeRouter");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
@@ -22,9 +23,10 @@ app.use((req, res, next) => {
 });
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
-app.get('/', (req, res) => {
+app.get('/start', (req, res) => {
     res.send('Express + TypeScript Server');
 });
+app.use(employeeRouter_1.employeeRouter);
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });

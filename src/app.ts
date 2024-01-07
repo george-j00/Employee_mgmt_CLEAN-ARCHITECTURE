@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { start } from 'simple-auth-connection';
+import { employeeRouter } from './routes/employeeRouter';
 
 
 dotenv.config();
@@ -24,11 +25,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/start', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
+app.use(employeeRouter)
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});  
+});   

@@ -1,24 +1,27 @@
 import { EmployeeEntity } from "../entities/employeeEntity";
 import { IEmployeeUsecase } from "../interfaces/IEmployeeUsecase";
+import { EmployeeRepository } from "../repositories/employeeRepository";
 
 export class EmployeeUsecase implements IEmployeeUsecase {
 
      
     constructor (private readonly employeeRepository : EmployeeRepository){}
 
-    addEmployee(employee: EmployeeEntity): Promise<EmployeeEntity> {
-        throw new Error("Method not implemented.");
+   async addEmployee(employee: EmployeeEntity): Promise<void> {
+       await this.employeeRepository.addEmployee(employee);
     }
-    getEmployeeById(id: string): Promise<EmployeeEntity | null> {
-        throw new Error("Method not implemented.");
+   async getEmployeeById(email: string): Promise<EmployeeEntity | null> {
+      return await this.employeeRepository.getEmployeeById(email);
     }
-    getAllEmployees(): Promise<EmployeeEntity[]> {
-        throw new Error("Method not implemented.");
+   async getAllEmployees(): Promise<EmployeeEntity[]> {
+      return  await this.employeeRepository.getAllEmployees();
     }
-    updateEmployee(id: string, employeeData: Partial<EmployeeEntity>): Promise<EmployeeEntity | null> {
-        throw new Error("Method not implemented.");
+   async updateEmployee(email: string, employeeData: Partial<EmployeeEntity>): Promise<EmployeeEntity | null> {
+       return await this.employeeRepository.updateEmployee(email, employeeData);
     }
-    deleteEmployee(id: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async deleteEmployee(email: string): Promise<void> {
+        await this.employeeRepository.deleteEmployee(email)
     }
+
+   
 }

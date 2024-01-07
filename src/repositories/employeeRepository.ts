@@ -1,25 +1,35 @@
-import { Model } from "mongoose";
+import { Document, Model } from "mongoose";
 import { IEmployeeUsecase } from "../interfaces/IEmployeeUsecase";
+import { EmployeeEntity } from "../entities/employeeEntity";
+import { IEmployeeSchema } from "../interfaces/IEmployeeSchema";
 
-export class EmployeeRepository {
+export class EmployeeRepository implements IEmployeeUsecase {
 
-    private readonly Employee : Model<Document>;
+  private readonly Employee: Model<IEmployeeSchema>;
+
+  constructor(employeeModel: Model<IEmployeeSchema>) {
+    this.Employee = employeeModel;
+  }
+
+  async addEmployee(employee: EmployeeEntity): Promise<void> {
+    const newEmployee = new this.Employee(employee);
+    await newEmployee.save();
+    console.log('employee added successfully');
     
-    constructor(employeeModel : Model<Document>){
-        this.Employee = employeeModel ;
-    }
-
-    async add(empData : IEmployeeUsecase):Promise<Document> {
-        const newEmployee = new this.Employee(empData);
-        return await newEmployee.save();
-    }
-    async delete(empId : string) : Promise<void> {
-        await this.Employee.findByIdAndDelete(empId);
-    }
-    async update(empId :string , empData: IEmployeeUsecase): Promise<Document | null>{
-        return await this.Employee.findByIdAndUpdate(empId, empData, { new: true });
-    }
-    async getEmp() : Promise<Document[]>{
-        return await this.Employee.find();
-    }
+  }
+  async getEmployeeById(email: string): Promise<EmployeeEntity | null> {
+    return await this.Employee.findOne({email : email});
+  }
+  async getAllEmployees(): Promise<EmployeeEntity[]> {
+    return await this.Employee.find();
+  }
+  async updateEmployee(
+    email: string,
+    employeeData: Partial<EmployeeEntity>
+  ): Promise<EmployeeEntity | null> {
+    return await this.Employee.findOneAndUpdate({ email }, employeeData, { new: true });
+  }
+  async deleteEmployee(email: string): Promise<void> {
+    await this.Employee.deleteOne({email : email});
+  }
 }
